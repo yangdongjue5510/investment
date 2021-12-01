@@ -36,5 +36,5 @@ public class Products {
 	private Date finishedAt;
 
 	@Transient	//JPA로 활용되지 않음.
-	private long investerCount;
+	private long investorCount;
 }

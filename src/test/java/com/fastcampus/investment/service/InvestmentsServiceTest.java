@@ -18,6 +18,7 @@ class InvestmentsServiceTest {
 	InvestmentsService investmentsService;
 	@Autowired
 	ProductsService productsService;
+
 	@Test
 	void insertInvestment() {
 		long countInvestment = investmentsService.countInvestment();
@@ -27,5 +28,15 @@ class InvestmentsServiceTest {
 		investments.setUserId(1L);
 		investmentsService.insertInvestment(investments);
 		Assertions.assertEquals(investmentsService.countInvestment(), countInvestment+1L);
+	}
+
+	@Test
+	void checkInvesterCount() {
+		long invester = investmentsService.findInvestorCount(1);
+		Investments investments = new Investments();
+		investments.setProduct(productsService.findProductsById(1));
+		investmentsService.insertInvestment(investments);
+		Long investorCountAfterInsert = investmentsService.findInvestorCount(1);
+		Assertions.assertEquals(investorCountAfterInsert, invester+1);
 	}
 }
