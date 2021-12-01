@@ -34,9 +34,17 @@ class InvestmentsServiceTest {
 	void checkInvesterCount() {
 		long invester = investmentsService.findInvestorCount(1);
 		Investments investments = new Investments();
+		investments.setInvestmentAmount(1000L);
 		investments.setProduct(productsService.findProductsById(1));
+		investments.setUserId(1L);
 		investmentsService.insertInvestment(investments);
 		Long investorCountAfterInsert = investmentsService.findInvestorCount(1);
 		Assertions.assertEquals(investorCountAfterInsert, invester+1);
+	}
+
+	@Test
+	void investValid() {
+		Assertions.assertTrue(investmentsService.checkAmountValidity(1L, 1));
+		Assertions.assertFalse(investmentsService.checkAmountValidity(1000000000000000L, 1));
 	}
 }

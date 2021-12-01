@@ -2,6 +2,7 @@ package com.fastcampus.investment.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,16 +27,17 @@ public class Investments {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(nullable = false)
 	private Long investId;
-	@NotNull
+
+	@Column(nullable = false)
 	private Long userId;
 
 	@ManyToOne	//다대일 관계
 	@JoinColumn(name="id")
-	@NotNull
 	private Products product;
 
-	@NotNull
+	@Column(nullable = false)
 	private Long investmentAmount;
 
 	@Temporal(TemporalType.DATE)
