@@ -1,5 +1,8 @@
 package com.fastcampus.investment.service;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +20,13 @@ public class InvestmentsService {
 	public long countInvestment() {
 		return investmentsRepository.count();
 	}
+
 	@Transactional
 	public Long insertInvestment(Investments investments) {
 		Investments insertedInvestment = investmentsRepository.save(investments);
 		return insertedInvestment.getInvestId();
 	}
+
+
+
 }

@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -36,8 +38,10 @@ public class Investments {
 	@NotNull
 	private Long investmentAmount;
 
+	@Temporal(TemporalType.DATE)
 	private Date investmentDate = new Date();	 //기본값을 현재로??
 
 	@Enumerated(EnumType.STRING)
 	private InvestmentStatus investmentStatus = InvestmentStatus.VALID;		//기본값을 유효로 ?
 }
+

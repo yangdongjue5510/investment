@@ -20,12 +20,12 @@ class InvestmentsServiceTest {
 	ProductsService productsService;
 	@Test
 	void insertInvestment() {
+		long countInvestment = investmentsService.countInvestment();
 		Investments investments = new Investments();
 		investments.setInvestmentAmount(1000L);
 		investments.setProduct(productsService.findProductsById(1));
 		investments.setUserId(1L);
 		investmentsService.insertInvestment(investments);
-		Assertions.assertEquals(investmentsService.countInvestment(), 1L);
-
+		Assertions.assertEquals(investmentsService.countInvestment(), countInvestment+1L);
 	}
 }
