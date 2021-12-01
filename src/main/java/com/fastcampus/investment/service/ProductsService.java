@@ -11,6 +11,7 @@ import com.fastcampus.investment.repository.ProductsRepository;
 
 @Service
 public class ProductsService {
+
 	@Autowired
 	private ProductsRepository productsRepository;
 
