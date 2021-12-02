@@ -1,5 +1,7 @@
 package com.fastcampus.investment.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fastcampus.investment.domain.InvestmentStatus;
 import com.fastcampus.investment.domain.Investments;
 import com.fastcampus.investment.domain.Products;
+import com.fastcampus.investment.domain.ResponseInvestments;
 import com.fastcampus.investment.repository.InvestmentsRepository;
 
 @Service
@@ -19,11 +22,6 @@ public class InvestmentsService {
 
 	@Autowired
 	ProductsService productsService;
-
-	@Transactional
-	public long countInvestment() {
-		return investmentsRepository.count();
-	}
 
 	@Transactional
 	public Investments insertInvestment(Investments investments) {
@@ -42,6 +40,7 @@ public class InvestmentsService {
 	@Transactional
 	public long sumProductInvestments(long productId) {
 		return investmentByProductId(productId, investmentsRepository.findAll().stream())
+			.filter(invest -> invest.getStatus().equals(InvestmentStatus.INVESTED))
 			.map(invest -> invest.getInvestAmount()).reduce(0L, Long::sum);
 	}
 
@@ -49,10 +48,21 @@ public class InvestmentsService {
 	public boolean checkAmountValidity(long moneyAmount, long productId) {
 		Products product = productsService.findProductsById(productId);
 		long sumAmount = sumProductInvestments(productId);
-		if (moneyAmount + sumAmount < product.getTotalInvestingAmount()) {
+		if (moneyAmount + sumAmount < product.getTotalInvestAmount()) {
 			return true;
 		}
 		return false;
+	}
+
+	@Transactional
+	public List<ResponseInvestments> findInvestByUserId(long userId) {
+		return investmentsRepository.findAll().stream().filter(invest -> invest.getUserId() == userId)
+			.map(invest -> new ResponseInvestments(invest)).collect(Collectors.toList());
+	}
+
+	@Transactional
+	long countInvestment() {
+		return investmentsRepository.count();
 	}
 
 	private Stream<Investments> investmentByProductId(long productId, Stream<Investments> stream) {

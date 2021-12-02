@@ -20,12 +20,21 @@ import lombok.Setter;
 public class Products {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String title;
 
 	@Column(name = "TOTAL_INVESTING_AMOUNT")
-	private Long totalInvestingAmount;
+	private Long totalInvestAmount;
+
+	/**
+	 * investedCount, investedAmount는 db, jpa에 활용되지 않음.
+	 */
+	@Transient
+	private long investedCount;
+
+	@Transient
+	private long investedAmount;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "STARTED_AT")
@@ -35,6 +44,4 @@ public class Products {
 	@Column(name= "FINISHED_AT")
 	private Date finishedAt;
 
-	@Transient	//JPA로 활용되지 않음.
-	private long investorCount;
 }

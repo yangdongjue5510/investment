@@ -23,9 +23,9 @@ import lombok.Setter;
 public class Investments {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(nullable = false)
-	private Long investId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "investId", nullable = false)
+	private Long id;
 
 	@Column(nullable = false)
 	private Long userId;

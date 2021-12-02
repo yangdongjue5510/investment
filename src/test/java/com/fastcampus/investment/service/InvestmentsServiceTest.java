@@ -23,7 +23,7 @@ class InvestmentsServiceTest {
 	void insertInvestment() {
 		long countInvestment = investmentsService.countInvestment();
 		Investments investments = new Investments();
-		investments.setInvestmentAmount(1000L);
+		investments.setInvestAmount(1000L);
 		investments.setProduct(productsService.findProductsById(1));
 		investments.setUserId(1L);
 		investmentsService.insertInvestment(investments);
@@ -34,7 +34,7 @@ class InvestmentsServiceTest {
 	void checkInvesterCount() {
 		long invester = investmentsService.findInvestorCount(1);
 		Investments investments = new Investments();
-		investments.setInvestmentAmount(1000L);
+		investments.setInvestAmount(1000L);
 		investments.setProduct(productsService.findProductsById(1));
 		investments.setUserId(1L);
 		investmentsService.insertInvestment(investments);
