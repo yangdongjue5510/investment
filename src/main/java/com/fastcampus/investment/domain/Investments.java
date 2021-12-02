@@ -13,10 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.ColumnDefault;
-
-import com.sun.istack.NotNull;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -37,13 +34,17 @@ public class Investments {
 	@JoinColumn(name="id")
 	private Products product;
 
+	@Transient	//product id
+	private Long productId;
+
 	@Column(nullable = false)
-	private Long investmentAmount;
+	private Long investAmount;
 
 	@Temporal(TemporalType.DATE)
 	private Date investmentDate = new Date();	 //기본값을 현재로??
 
 	@Enumerated(EnumType.STRING)
-	private InvestmentStatus investmentStatus = InvestmentStatus.VALID;		//기본값을 유효로 ?
+	@Column(name = "InvestmentStatus")
+	private InvestmentStatus status = InvestmentStatus.INVESTED;		//기본값을 유효로 ?
 }
 

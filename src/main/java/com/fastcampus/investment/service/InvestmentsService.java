@@ -17,34 +17,37 @@ public class InvestmentsService {
 	@Autowired
 	InvestmentsRepository investmentsRepository;
 
+	@Autowired
+	ProductsService productsService;
+
 	@Transactional
 	public long countInvestment() {
 		return investmentsRepository.count();
 	}
 
 	@Transactional
-	public Long insertInvestment(Investments investments) {
+	public Investments insertInvestment(Investments investments) {
+		Products product = productsService.findProductsById(investments.getProductId());
+		investments.setProduct(product);
 		Investments insertedInvestment = investmentsRepository.save(investments);
-		return insertedInvestment.getInvestId();
+		return insertedInvestment;
 	}
 
 	@Transactional
 	public Long findInvestorCount(long productId) {
 		return investmentByProductId(productId, investmentsRepository.findAll().stream())
-			.filter(invest -> invest.getInvestmentStatus().equals(InvestmentStatus.VALID)).distinct().count();
+			.filter(invest -> invest.getStatus().equals(InvestmentStatus.INVESTED)).distinct().count();
 	}
 
 	@Transactional
 	public long sumProductInvestments(long productId) {
 		return investmentByProductId(productId, investmentsRepository.findAll().stream())
-			.map(invest -> invest.getInvestmentAmount()).reduce(0L, Long::sum);
+			.map(invest -> invest.getInvestAmount()).reduce(0L, Long::sum);
 	}
 
 	@Transactional
 	public boolean checkAmountValidity(long moneyAmount, long productId) {
-		Products product = productFromInvestment(
-			investmentByProductId(productId, investmentsRepository.findAll().stream()))
-			.findFirst().get();
+		Products product = productsService.findProductsById(productId);
 		long sumAmount = sumProductInvestments(productId);
 		if (moneyAmount + sumAmount < product.getTotalInvestingAmount()) {
 			return true;

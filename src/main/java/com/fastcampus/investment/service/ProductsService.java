@@ -21,6 +21,7 @@ public class ProductsService {
 
 	@Transactional
 	public Products findProductsById(long id) {
+		System.out.println("============="+id);
 		Products foundProducts = productsRepository.findById(id).get();
 		return foundProducts;
 	}

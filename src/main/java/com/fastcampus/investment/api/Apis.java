@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fastcampus.investment.domain.InvestmentStatus;
 import com.fastcampus.investment.domain.Investments;
 import com.fastcampus.investment.domain.Products;
 import com.fastcampus.investment.dto.ResponseDto;
@@ -35,8 +35,17 @@ public class Apis {
 	}
 
 	@PostMapping("/investment")
-	public ResponseDto<Investments> investmentPost(@RequestBody Investments investment) {
+	public ResponseDto<Investments> investmentPost(@RequestHeader("X-USER-ID") long userId,
+		@RequestBody Investments investment) {
 		// TODO: 컨트롤러 구현
-		return null;
+		long amount = investment.getInvestAmount();
+		investment.setUserId(userId);
+		Products product = productsService.findProductsById(investment.getProductId());
+		if (investmentsService.checkAmountValidity(amount, product.getId()) == false) {
+			investment.setStatus(InvestmentStatus.FAIL);
+			return new ResponseDto<>(investment, HttpStatus.BAD_REQUEST);
+		}
+		Investments insertedInvestment= investmentsService.insertInvestment(investment);
+		return new ResponseDto<>(insertedInvestment, HttpStatus.OK);
 	}
 }
