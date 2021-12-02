@@ -2,21 +2,12 @@ package com.fastcampus.investment.domain;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 테스트 코드에서 제시한 변수명과 일치시키기 위한 반환용 클래스.
+ */
 @Getter @Setter
 public class ResponseInvestments {
 	private Long id;

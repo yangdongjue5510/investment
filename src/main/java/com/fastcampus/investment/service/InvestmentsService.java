@@ -25,7 +25,7 @@ public class InvestmentsService {
 
 	@Transactional
 	public Investments insertInvestment(Investments investments) {
-		Products product = productsService.findProductsById(investments.getProductId());
+		Products product = investments.getProduct();
 		investments.setProduct(product);
 		Investments insertedInvestment = investmentsRepository.save(investments);
 		return insertedInvestment;
@@ -61,15 +61,21 @@ public class InvestmentsService {
 	}
 
 	@Transactional
+	public List<ResponseInvestments> updateInvestStatus(long userId, long productId) {
+		List<ResponseInvestments> list = investmentsRepository.findAll().stream()
+			.filter(invest -> invest.getUserId() == userId && invest.getProduct().getId() == productId
+				&& invest.getStatus().equals(InvestmentStatus.INVESTED))
+			.map(invest -> new ResponseInvestments(invest)).collect(Collectors.toList());
+		list.stream().forEach(invest -> invest.setStatus(InvestmentStatus.CANCELED));
+		return list;
+	}
+
+	@Transactional
 	long countInvestment() {
 		return investmentsRepository.count();
 	}
 
 	private Stream<Investments> investmentByProductId(long productId, Stream<Investments> stream) {
 		return stream.filter(investments -> investments.getProduct().getId() == productId);
-	}
-
-	private Stream<Products> productFromInvestment(Stream<Investments> stream) {
-		return stream.map(investments -> investments.getProduct());
 	}
 }

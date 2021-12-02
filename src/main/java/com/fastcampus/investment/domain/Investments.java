@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class Investments {
 	@Column(nullable = false)
 	private Long userId;
 
-	@ManyToOne	//다대일 관계
+	@ManyToOne(fetch = FetchType.EAGER )	//다대일 관계
 	@JoinColumn(name="id")
 	private Products product;
 

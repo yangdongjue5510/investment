@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +45,6 @@ public class Apis {
 	@PostMapping("/investment")
 	public ResponseDto<ResponseInvestments> investmentPost(@RequestHeader("X-USER-ID") long userId,
 		@ModelAttribute Investments investment) {
-		// TODO: 컨트롤러 구현
 		long amount = investment.getInvestAmount();
 		investment.setUserId(userId);
 		if (investmentsService.checkAmountValidity(amount, investment.getProductId()) == false) {
@@ -56,5 +57,12 @@ public class Apis {
 	@GetMapping("/investment")
 	public ResponseDto<List<ResponseInvestments>> investmentGet(@RequestHeader("X-USER-ID") long userId) {
 		return new ResponseDto<>(investmentsService.findInvestByUserId(userId), HttpStatus.OK);
+	}
+
+	@PutMapping("/investment/{productId}")
+	public ResponseDto<List<ResponseInvestments>> investmentPut(@RequestHeader("X-USER-ID") long userId,
+		@PathVariable long productId) {
+		List<ResponseInvestments> updatedInvests = investmentsService.updateInvestStatus(userId, productId);
+		return new ResponseDto<>(updatedInvests, HttpStatus.OK);
 	}
 }
