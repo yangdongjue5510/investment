@@ -12,23 +12,26 @@ spring:
       minimum-idle: 1
       maximum-pool-size: 5
       pool-name: H2_DB
+
   mvc:
     hiddenmethod:
       filter:
         enabled: true
+
   sql:
     init:
       platform: h2
+      mode: always
+
   jpa:
     open-in-view: true
-    hibernate:
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      use-new-id-generator-mappings: false
-      ddl-auto: update
     show-sql: true
     properties:
       hibernate.format_sql: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+
 server:
   port: 8080
 
