@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fastcampus.investment.domain.InvestmentStatus;
@@ -34,8 +32,7 @@ public class Apis {
 	@GetMapping("/product")
 	public ResponseDto<List<Products>> productGet() {
 		List<Products> list = productsService.findValidProducts();
-		list.stream().forEach(products
-			-> {
+		list.stream().forEach(products -> {
 			products.setInvestedCount(investmentsService.findInvestorCount(products.getId()));
 			products.setInvestedAmount(investmentsService.sumProductInvestments(products.getId()));
 		});
@@ -62,7 +59,7 @@ public class Apis {
 	@PutMapping("/investment/{productId}")
 	public ResponseDto<List<ResponseInvestments>> investmentPut(@RequestHeader("X-USER-ID") long userId,
 		@PathVariable long productId) {
-		List<ResponseInvestments> updatedInvests = investmentsService.updateInvestStatus(userId, productId);
+		List<ResponseInvestments> updatedInvests = investmentsService.cancelInvestStatus(userId, productId);
 		return new ResponseDto<>(updatedInvests, HttpStatus.OK);
 	}
 }

@@ -25,7 +25,7 @@ public class InvestmentsService {
 
 	@Transactional
 	public Investments insertInvestment(Investments investments) {
-		Products product = investments.getProduct();
+		Products product = productsService.findProductsById(investments.getProductId());
 		investments.setProduct(product);
 		Investments insertedInvestment = investmentsRepository.save(investments);
 		return insertedInvestment;
@@ -61,13 +61,12 @@ public class InvestmentsService {
 	}
 
 	@Transactional
-	public List<ResponseInvestments> updateInvestStatus(long userId, long productId) {
-		List<ResponseInvestments> list = investmentsRepository.findAll().stream()
-			.filter(invest -> invest.getUserId() == userId && invest.getProduct().getId() == productId
-				&& invest.getStatus().equals(InvestmentStatus.INVESTED))
-			.map(invest -> new ResponseInvestments(invest)).collect(Collectors.toList());
-		list.stream().forEach(invest -> invest.setStatus(InvestmentStatus.CANCELED));
-		return list;
+	public List<ResponseInvestments> cancelInvestStatus(long userId, long productId) {
+		List<Investments> list = investmentsRepository.findAll().stream()
+			.filter(invest -> isValidInvestForCancel(userId, productId, invest))
+			.collect(Collectors.toList());
+		list.stream().forEach(invest -> investmentsRepository.updateInvestStatus(invest, InvestmentStatus.CANCELED));
+		return mapResponseInvestmentType(list);
 	}
 
 	@Transactional
@@ -77,5 +76,18 @@ public class InvestmentsService {
 
 	private Stream<Investments> investmentByProductId(long productId, Stream<Investments> stream) {
 		return stream.filter(investments -> investments.getProduct().getId() == productId);
+	}
+
+	private boolean isValidInvestForCancel(long userId, long productId, Investments invest) {
+		if (invest.getUserId() == userId
+			&& invest.getProduct().getId() == productId
+			&& invest.getStatus().equals(InvestmentStatus.INVESTED)) {
+			return true;
+		}
+		return false;
+	}
+
+	private List<ResponseInvestments> mapResponseInvestmentType(List<Investments> list) {
+		return list.stream().map(invest -> new ResponseInvestments(invest)).collect(Collectors.toList());
 	}
 }
