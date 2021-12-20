@@ -17,6 +17,9 @@ public class ProductsService {
 	@Autowired
 	private ProductsRepository productsRepository;
 
+	@Autowired
+	private InvestmentsService investmentsService;
+
 	@Transactional
 	public Products findProductsById(long id) {
 		Products foundProducts = productsRepository.findById(id).get();
@@ -29,5 +32,13 @@ public class ProductsService {
 		return productsRepository.findAll().stream().filter(products ->
 			products.getStartedAt().before(now) && products.getFinishedAt().after(now)
 		).collect(Collectors.toList());
+	}
+
+	@Transactional
+	public void bindCountAndAmount(List<Products> list) {
+		list.stream().forEach(products -> {
+			products.setInvestedCount(investmentsService.findInvestorCount(products.getId()));
+			products.setInvestedAmount(investmentsService.sumProductInvestments(products.getId()));
+		});
 	}
 }

@@ -32,10 +32,7 @@ public class Apis {
 	@GetMapping("/product")
 	public ResponseDto<List<Products>> productGet() {
 		List<Products> list = productsService.findValidProducts();
-		list.stream().forEach(products -> {
-			products.setInvestedCount(investmentsService.findInvestorCount(products.getId()));
-			products.setInvestedAmount(investmentsService.sumProductInvestments(products.getId()));
-		});
+		productsService.bindCountAndAmount(list);
 		return new ResponseDto<>(list, HttpStatus.OK);
 	}
 
