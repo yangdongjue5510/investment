@@ -4,21 +4,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.investment.domain.Products;
 import com.fastcampus.investment.repository.ProductsRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class ProductsService {
 
-	@Autowired
-	private ProductsRepository productsRepository;
-
-	@Autowired
-	private InvestmentsService investmentsService;
+	private final ProductsRepository productsRepository;
 
 	@Transactional
 	public Products findProductsById(long id) {
@@ -32,13 +30,5 @@ public class ProductsService {
 		return productsRepository.findAll().stream().filter(products ->
 			products.getStartedAt().before(now) && products.getFinishedAt().after(now)
 		).collect(Collectors.toList());
-	}
-
-	@Transactional
-	public void bindCountAndAmount(List<Products> list) {
-		list.stream().forEach(products -> {
-			products.setInvestedCount(investmentsService.findInvestorCount(products.getId()));
-			products.setInvestedAmount(investmentsService.sumProductInvestments(products.getId()));
-		});
 	}
 }

@@ -32,7 +32,7 @@ public class Apis {
 	@GetMapping("/product")
 	public ResponseDto<List<Products>> productGet() {
 		List<Products> list = productsService.findValidProducts();
-		productsService.bindCountAndAmount(list);
+		investmentsService.bindCountAndAmount(list);
 		return new ResponseDto<>(list, HttpStatus.OK);
 	}
 

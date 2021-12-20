@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,14 +13,15 @@ import com.fastcampus.investment.domain.Products;
 import com.fastcampus.investment.domain.ResponseInvestments;
 import com.fastcampus.investment.repository.InvestmentsRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class InvestmentsService {
 
-	@Autowired
-	InvestmentsRepository investmentsRepository;
+	private final InvestmentsRepository investmentsRepository;
 
-	@Autowired
-	ProductsService productsService;
+	private final ProductsService productsService;
 
 	@Transactional
 	public Investments insertInvestment(Investments investments) {
@@ -72,6 +72,14 @@ public class InvestmentsService {
 	@Transactional
 	long countInvestment() {
 		return investmentsRepository.count();
+	}
+
+	@Transactional
+	public void bindCountAndAmount(List<Products> list) {
+		list.stream().forEach(products -> {
+			products.setInvestedCount(findInvestorCount(products.getId()));
+			products.setInvestedAmount(sumProductInvestments(products.getId()));
+		});
 	}
 
 	private Stream<Investments> investmentByProductId(long productId, Stream<Investments> stream) {
