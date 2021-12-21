@@ -1,5 +1,6 @@
 package com.fastcampus.investment.domain;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -38,10 +39,10 @@ public class Products {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "STARTED_AT")
-	private Date startedAt;
+	private LocalDateTime startedAt;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name= "FINISHED_AT")
-	private Date finishedAt;
+	private LocalDateTime finishedAt;
 
 }

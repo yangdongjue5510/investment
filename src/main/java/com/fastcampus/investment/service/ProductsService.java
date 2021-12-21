@@ -1,5 +1,6 @@
 package com.fastcampus.investment.service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,9 +27,9 @@ public class ProductsService {
 
 	@Transactional
 	public List<Products> findValidProducts() {
-		Date now = new Date();
+		LocalDateTime now = LocalDateTime.now();
 		return productsRepository.findAll().stream().filter(products ->
-			products.getStartedAt().before(now) && products.getFinishedAt().after(now)
+			products.getStartedAt().isBefore(now) && products.getFinishedAt().isAfter(now)
 		).collect(Collectors.toList());
 	}
 }

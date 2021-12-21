@@ -1,5 +1,6 @@
 package com.fastcampus.investment.domain;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.Getter;
@@ -13,7 +14,7 @@ public class ResponseInvestments {
 	private Long id;
 	private Long userId;
 	private Products product;
-	private Date investedAt;
+	private LocalDateTime investedAt;
 	private long investedAmount;
 	private InvestmentStatus status;
 

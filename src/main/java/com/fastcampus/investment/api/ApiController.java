@@ -23,7 +23,7 @@ import com.fastcampus.investment.service.ProductsService;
 
 @RestController
 @RequestMapping("/api")
-public class Apis {
+public class ApiController {
 	@Autowired
 	ProductsService productsService;
 	@Autowired

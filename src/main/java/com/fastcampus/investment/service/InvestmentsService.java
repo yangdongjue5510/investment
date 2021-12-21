@@ -41,7 +41,7 @@ public class InvestmentsService {
 	public long sumProductInvestments(long productId) {
 		return investmentByProductId(productId, investmentsRepository.findAll().stream())
 			.filter(invest -> invest.getStatus().equals(InvestmentStatus.INVESTED))
-			.map(invest -> invest.getInvestAmount()).reduce(0L, Long::sum);
+			.mapToLong(Investments::getInvestAmount).sum();
 	}
 
 	@Transactional

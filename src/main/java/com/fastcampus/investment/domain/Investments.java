@@ -1,5 +1,6 @@
 package com.fastcampus.investment.domain;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import org.apache.tomcat.jni.Local;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,7 +45,7 @@ public class Investments {
 	private Long investAmount;
 
 	@Temporal(TemporalType.DATE)
-	private Date investmentDate = new Date();	 //기본값을 현재로??
+	private LocalDateTime investmentDate = LocalDateTime.now();	 //기본값을 현재로??
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "InvestmentStatus")
