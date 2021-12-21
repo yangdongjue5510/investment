@@ -10,7 +10,7 @@ import com.fastcampus.investment.dto.ResponseDto;
 @ControllerAdvice
 @RestController
 public class GlobalExceptionHandler {
-	@ExceptionHandler
+	@ExceptionHandler(Exception.class)
 	public ResponseDto<String> handleException(Exception e) {
 		return new ResponseDto<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
