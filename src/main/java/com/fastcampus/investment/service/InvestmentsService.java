@@ -96,6 +96,6 @@ public class InvestmentsService {
 	}
 
 	private List<ResponseInvestments> mapResponseInvestmentType(List<Investments> list) {
-		return list.stream().map(invest -> new ResponseInvestments(invest)).collect(Collectors.toList());
+		return list.stream().map(ResponseInvestments::new).collect(Collectors.toList());
 	}
 }
