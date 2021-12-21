@@ -21,7 +21,7 @@ public class ProductsService {
 
 	@Transactional
 	public Products findProductsById(long id) {
-		Products foundProducts = productsRepository.findById(id).get();
+		Products foundProducts = productsRepository.findById(id).orElseThrow();
 		return foundProducts;
 	}
 
