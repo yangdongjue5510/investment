@@ -39,10 +39,10 @@ public class Products {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "STARTED_AT")
-	private LocalDateTime startedAt;
+	private Date startedAt;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name= "FINISHED_AT")
-	private LocalDateTime finishedAt;
+	private Date finishedAt;
 
 }

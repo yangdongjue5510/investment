@@ -27,9 +27,9 @@ public class ProductsService {
 
 	@Transactional
 	public List<Products> findValidProducts() {
-		LocalDateTime now = LocalDateTime.now();
+		Date now = new Date();
 		return productsRepository.findAll().stream().filter(products ->
-			products.getStartedAt().isBefore(now) && products.getFinishedAt().isAfter(now)
+			products.getStartedAt().before(now) && products.getFinishedAt().after(now)
 		).collect(Collectors.toList());
 	}
 }

@@ -14,7 +14,7 @@ public class ResponseInvestments {
 	private Long id;
 	private Long userId;
 	private Products product;
-	private LocalDateTime investedAt;
+	private Date investedAt;
 	private long investedAmount;
 	private InvestmentStatus status;
 

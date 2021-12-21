@@ -45,7 +45,7 @@ public class Investments {
 	private Long investAmount;
 
 	@Temporal(TemporalType.DATE)
-	private LocalDateTime investmentDate = LocalDateTime.now();	 //기본값을 현재로??
+	private Date investmentDate = new Date();	 //기본값을 현재로??
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "InvestmentStatus")
