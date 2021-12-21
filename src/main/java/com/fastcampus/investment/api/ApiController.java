@@ -54,9 +54,9 @@ public class ApiController {
 	}
 
 	@PutMapping("/investment/{productId}")
-	public ResponseDto<List<ResponseInvestments>> investmentPut(@RequestHeader("X-USER-ID") long userId,
+	public ResponseDto<ResponseInvestments> investmentPut(@RequestHeader("X-USER-ID") long userId,
 		@PathVariable long productId) {
-		List<ResponseInvestments> updatedInvests = investmentsService.cancelInvestStatus(userId, productId);
-		return new ResponseDto<>(updatedInvests, HttpStatus.OK);
+		Investments updatedInvests = investmentsService.cancelInvestStatus(userId, productId);
+		return new ResponseDto<>(new ResponseInvestments(updatedInvests), HttpStatus.OK);
 	}
 }

@@ -33,15 +33,14 @@ public class InvestmentsService {
 
 	@Transactional
 	public Long findInvestorCount(long productId) {
-		return investmentByProductId(productId, investmentsRepository.findAll().stream())
-			.filter(invest -> invest.getStatus().equals(InvestmentStatus.INVESTED)).distinct().count();
+		return investmentsRepository.findInvestmentsByIdAndStatusEquals(productId, InvestmentStatus.INVESTED)
+			.stream().distinct().count();
 	}
 
 	@Transactional
 	public long sumProductInvestments(long productId) {
-		return investmentByProductId(productId, investmentsRepository.findAll().stream())
-			.filter(invest -> invest.getStatus().equals(InvestmentStatus.INVESTED))
-			.mapToLong(Investments::getInvestAmount).sum();
+		return investmentsRepository.findInvestmentsByIdAndStatusEquals(productId, InvestmentStatus.INVESTED)
+			.stream().mapToLong(Investments::getInvestAmount).sum();
 	}
 
 	@Transactional
@@ -56,17 +55,16 @@ public class InvestmentsService {
 
 	@Transactional
 	public List<ResponseInvestments> findInvestByUserId(long userId) {
-		return investmentsRepository.findAll().stream().filter(invest -> invest.getUserId() == userId)
+		return investmentsRepository.findInvestmentsByUserId(userId).stream()
 			.map(invest -> new ResponseInvestments(invest)).collect(Collectors.toList());
 	}
 
 	@Transactional
-	public List<ResponseInvestments> cancelInvestStatus(long userId, long productId) {
-		List<Investments> list = investmentsRepository.findAll().stream()
-			.filter(invest -> isValidInvestForCancel(userId, productId, invest))
-			.collect(Collectors.toList());
-		list.stream().forEach(invest -> investmentsRepository.updateInvestStatus(invest, InvestmentStatus.CANCELED));
-		return mapResponseInvestmentType(list);
+	public Investments cancelInvestStatus(long userId, long productId) {
+		Investments investment =
+			investmentsRepository.findInvestmentsByUserIdAndIdAndStatusEquals(userId, productId, InvestmentStatus.INVESTED);
+		investmentsRepository.updateInvestStatus(investment, InvestmentStatus.CANCELED);
+		return investment;
 	}
 
 	@Transactional
@@ -80,10 +78,6 @@ public class InvestmentsService {
 			products.setInvestedCount(findInvestorCount(products.getId()));
 			products.setInvestedAmount(sumProductInvestments(products.getId()));
 		});
-	}
-
-	private Stream<Investments> investmentByProductId(long productId, Stream<Investments> stream) {
-		return stream.filter(investments -> investments.getProduct().getId() == productId);
 	}
 
 	private boolean isValidInvestForCancel(long userId, long productId, Investments invest) {
