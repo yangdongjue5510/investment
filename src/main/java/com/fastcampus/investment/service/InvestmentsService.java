@@ -2,7 +2,6 @@ package com.fastcampus.investment.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,7 +61,8 @@ public class InvestmentsService {
 	@Transactional
 	public Investments cancelInvestStatus(long userId, long productId) {
 		Investments investment =
-			investmentsRepository.findInvestmentsByUserIdAndIdAndStatusEquals(userId, productId, InvestmentStatus.INVESTED);
+			investmentsRepository.findInvestmentsByUserIdAndIdAndStatusEquals(userId, productId,
+				InvestmentStatus.INVESTED);
 		investmentsRepository.updateInvestStatus(investment, InvestmentStatus.CANCELED);
 		return investment;
 	}
@@ -78,18 +78,5 @@ public class InvestmentsService {
 			products.setInvestedCount(findInvestorCount(products.getId()));
 			products.setInvestedAmount(sumProductInvestments(products.getId()));
 		});
-	}
-
-	private boolean isValidInvestForCancel(long userId, long productId, Investments invest) {
-		if (invest.getUserId() == userId
-			&& invest.getProduct().getId() == productId
-			&& invest.getStatus().equals(InvestmentStatus.INVESTED)) {
-			return true;
-		}
-		return false;
-	}
-
-	private List<ResponseInvestments> mapResponseInvestmentType(List<Investments> list) {
-		return list.stream().map(ResponseInvestments::new).collect(Collectors.toList());
 	}
 }
