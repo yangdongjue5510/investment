@@ -21,13 +21,17 @@ import com.fastcampus.investment.dto.ResponseDto;
 import com.fastcampus.investment.service.InvestmentsService;
 import com.fastcampus.investment.service.ProductsService;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class ApiController {
-	@Autowired
-	ProductsService productsService;
-	@Autowired
-	InvestmentsService investmentsService;
+
+	private final ProductsService productsService;
+
+	private final InvestmentsService investmentsService;
 
 	@GetMapping("/product")
 	public ResponseDto<List<Products>> productGet() {

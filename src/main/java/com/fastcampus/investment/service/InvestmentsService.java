@@ -12,10 +12,10 @@ import com.fastcampus.investment.domain.Products;
 import com.fastcampus.investment.domain.ResponseInvestments;
 import com.fastcampus.investment.repository.InvestmentsRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class InvestmentsService {
 
 	private final InvestmentsRepository investmentsRepository;
